@@ -1,0 +1,137 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Define the theme object.
+$focus-flow-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  density: (
+    scale: 0,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+:root {
+  @include mat.all-component-themes($focus-flow-theme);
+}
+
+// Global styles with focus on accessibility and smooth animations
+* {
+  box-sizing: border-box;
+}
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0;
+  font-family: 'Roboto', "Helvetica Neue", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+// Smooth transitions for all interactive elements
+button, .mat-mdc-button, .mat-mdc-fab, .mat-mdc-chip {
+  transition: all 0.2s ease !important;
+}
+
+// Custom focus styles for accessibility
+*:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+// Typography improvements
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+// Material component customizations
+.mat-mdc-progress-bar {
+  border-radius: 4px;
+}
+
+.mat-mdc-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-mdc-fab {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.mat-mdc-chip {
+  border-radius: 20px !important;
+}
+
+// Responsive design utilities
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
+  .mat-mdc-card {
+    margin: 10px;
+  }
+}
+
+// Animation keyframes for enhanced UX
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideInFromTop {
+  0% { 
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Utility classes
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+.slide-in {
+  animation: slideInFromTop 0.5s ease-out;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .mat-mdc-card {
+    border: 2px solid #333;
+  }
+  
+  button {
+    border: 2px solid currentColor;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
