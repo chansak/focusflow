@@ -5,6 +5,7 @@ A modern, feature-rich Pomodoro timer application built with Angular 19, featuri
 ## 🎯 Overview
 
 FocusFlow helps you boost productivity using the proven Pomodoro Technique with advanced customization options:
+
 - **Customizable focus sessions** (1-120 minutes, default 25)
 - **Customizable break intervals** (1-60 minutes, default 5)
 - **Sound notifications** with Web Audio API integration
@@ -18,6 +19,7 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 ## ✨ Key Features
 
 ### 🔧 Advanced Timer Functionality
+
 - ⏱️ **Customizable Durations**: Set focus (1-120 min) and break (1-60 min) times
 - 🔊 **Sound Notifications**: Audio alerts at 10 seconds remaining and completion
 - 📊 **Real-time Progress**: Visual progress bar with live updates
@@ -25,6 +27,7 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 - � **Easy Controls**: Start/pause/reset with keyboard shortcuts
 
 ### 🎨 Professional Interface
+
 - 🧭 **Clean Navigation**: White header with black text menu
 - 💬 **Settings Dialog**: 1100px optimized layout with no scrollbars
 - 🎨 **Material Design 3**: Purple theme with complementary colors
@@ -32,12 +35,14 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 - 🌟 **Smooth Animations**: Polished transitions and interactions
 
 ### 📈 Analytics & Tracking
+
 - 📊 **Daily Statistics**: Track completed sessions and focus time
 - 📅 **Progress Metrics**: Weekly and monthly productivity insights
 - 💾 **Data Persistence**: Settings and stats saved locally
 - 🎯 **Session Counter**: Live tracking of daily achievements
 
 ### ♿ Accessibility Excellence
+
 - 🔍 **Screen Reader Support**: Complete ARIA label implementation
 - ⌨️ **Keyboard Navigation**: Full app control without mouse
 - 🎨 **High Contrast**: Support for accessibility preferences
@@ -65,21 +70,26 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/chansak/focusflow.git
    cd focusflow
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Start the development server**
+
    ```bash
    npm start
    ```
+
    or
+
    ```bash
    ng serve
    ```
@@ -97,6 +107,7 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 ## 📖 Usage Guide
 
 ### Basic Operation
+
 1. Click the **Play** button to start your focus session
 2. Customize durations in **Settings** if needed
 3. Work on your task until the timer completes
@@ -104,6 +115,7 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 5. Track your progress in the **Statistics** section
 
 ### Settings Configuration
+
 - **Focus Duration**: 1-120 minutes (default: 25)
 - **Break Duration**: 1-60 minutes (default: 5)
 - **Sound Notifications**: Toggle audio alerts
@@ -111,6 +123,7 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 - **Reset to Defaults**: Restore original settings
 
 ### Keyboard Shortcuts
+
 - **Space/Enter**: Start or pause the timer
 - **Ctrl+R**: Reset the current timer
 - **1**: Switch to Focus mode
@@ -120,16 +133,19 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 ## 🏗️ Architecture
 
 ### Component Structure
+
 - **AppComponent**: Main shell with header navigation
 - **PomodoroTimerComponent**: Core timer interface and controls
 - **SettingsComponent**: Advanced configuration dialog
 - **StatsComponent**: Analytics and progress dashboard
 
 ### Services
+
 - **PomodoroService**: Timer logic, settings management, Web Audio API
 - **QuotesService**: Motivational content rotation
 
 ### State Management
+
 - Signal-based reactive state
 - Computed values for derived data
 - LocalStorage persistence
@@ -138,6 +154,7 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 ## 🎉 Recent Enhancements
 
 ### October 2025 Updates
+
 - ✅ Sound notifications with Web Audio API
 - ✅ Customizable timer durations with validation
 - ✅ Advanced settings dialog with presets
@@ -150,4 +167,4 @@ FocusFlow helps you boost productivity using the proven Pomodoro Technique with 
 
 **Built with ❤️ using Angular 19 and modern web technologies**
 
-*FocusFlow - Where productivity meets perfect timing*
+_FocusFlow - Where productivity meets perfect timing_

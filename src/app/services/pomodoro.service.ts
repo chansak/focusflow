@@ -30,16 +30,20 @@ export class PomodoroService {
   // Default timer configuration
   private readonly DEFAULT_SETTINGS: PomodoroSettings = {
     focusDuration: 25, // minutes
-    breakDuration: 5,  // minutes
-    soundEnabled: true
+    breakDuration: 5, // minutes
+    soundEnabled: true,
   };
 
   // Settings state
   public readonly settings = signal<PomodoroSettings>(this.DEFAULT_SETTINGS);
 
   // Computed durations in seconds
-  private readonly focusDurationSeconds = computed(() => this.settings().focusDuration * 60);
-  private readonly breakDurationSeconds = computed(() => this.settings().breakDuration * 60);
+  private readonly focusDurationSeconds = computed(
+    () => this.settings().focusDuration * 60
+  );
+  private readonly breakDurationSeconds = computed(
+    () => this.settings().breakDuration * 60
+  );
 
   // Core timer state signals
   public readonly timeRemaining = signal<number>(this.focusDurationSeconds());
@@ -126,9 +130,10 @@ export class PomodoroService {
     // Update timer when settings change
     effect(() => {
       if (!this.isRunning()) {
-        const duration = this.currentMode() === 'focus' 
-          ? this.focusDurationSeconds() 
-          : this.breakDurationSeconds();
+        const duration =
+          this.currentMode() === 'focus'
+            ? this.focusDurationSeconds()
+            : this.breakDurationSeconds();
         this.timeRemaining.set(duration);
       }
     });
@@ -174,7 +179,9 @@ export class PomodoroService {
     this.pauseTimer();
     this.currentMode.set(mode);
     const duration =
-      mode === 'focus' ? this.focusDurationSeconds() : this.breakDurationSeconds();
+      mode === 'focus'
+        ? this.focusDurationSeconds()
+        : this.breakDurationSeconds();
     this.timeRemaining.set(duration);
   }
 
@@ -298,7 +305,11 @@ export class PomodoroService {
 
   private playCountdownSound(): void {
     // Check if browser supports audio and sound is enabled
-    if (typeof window !== 'undefined' && window.Audio && this.settings().soundEnabled) {
+    if (
+      typeof window !== 'undefined' &&
+      window.Audio &&
+      this.settings().soundEnabled
+    ) {
       try {
         // Create a short beep sound using Web Audio API
         const audioContext = new (window.AudioContext ||
@@ -373,7 +384,7 @@ export class PomodoroService {
 
   // Settings management methods
   public updateSettings(newSettings: Partial<PomodoroSettings>): void {
-    this.settings.update(current => ({ ...current, ...newSettings }));
+    this.settings.update((current) => ({ ...current, ...newSettings }));
   }
 
   public resetSettingsToDefault(): void {
@@ -388,9 +399,24 @@ export class PomodoroService {
           const settings = JSON.parse(savedSettings);
           // Validate settings and merge with defaults
           const validSettings: PomodoroSettings = {
-            focusDuration: Math.max(1, Math.min(120, settings.focusDuration || this.DEFAULT_SETTINGS.focusDuration)),
-            breakDuration: Math.max(1, Math.min(60, settings.breakDuration || this.DEFAULT_SETTINGS.breakDuration)),
-            soundEnabled: settings.soundEnabled !== undefined ? settings.soundEnabled : this.DEFAULT_SETTINGS.soundEnabled
+            focusDuration: Math.max(
+              1,
+              Math.min(
+                120,
+                settings.focusDuration || this.DEFAULT_SETTINGS.focusDuration
+              )
+            ),
+            breakDuration: Math.max(
+              1,
+              Math.min(
+                60,
+                settings.breakDuration || this.DEFAULT_SETTINGS.breakDuration
+              )
+            ),
+            soundEnabled:
+              settings.soundEnabled !== undefined
+                ? settings.soundEnabled
+                : this.DEFAULT_SETTINGS.soundEnabled,
           };
           this.settings.set(validSettings);
         }

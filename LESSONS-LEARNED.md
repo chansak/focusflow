@@ -3,6 +3,7 @@
 ## Angular 19 Insights
 
 ### Signals
+
 - **Signals are game-changing for state management**: Replaced complex RxJS patterns with simple, reactive signals that automatically track dependencies
 - **Computed signals eliminate manual subscriptions**: No need to manually manage subscriptions or worry about memory leaks
 - **Signal updates are synchronous**: Unlike observables, signal updates happen immediately, making debugging easier
@@ -12,12 +13,14 @@
   - Don't mix signals with RxJS observables unnecessarily - pick one pattern and stick with it
 
 ### Zoneless Change Detection
+
 - **Dramatically improved performance**: Eliminated the overhead of Zone.js change detection cycles
 - **Signals work perfectly with zoneless**: The reactive nature of signals naturally triggers updates without zones
 - **Careful with third-party libraries**: Some libraries still rely on Zone.js, requiring manual change detection triggers
 - **Event handling changes**: Had to be more explicit about when change detection should run for non-signal updates
 
 ### Material Components
+
 - **Easy components**: MatCard, MatButton, MatIcon, MatProgressBar worked seamlessly out of the box
 - **MatChips were surprisingly versatile**: Great for the mode selection UI with built-in selection states
 - **Theming with CSS custom properties**: Much easier than the old SCSS theming approach
@@ -29,6 +32,7 @@
 ## AI Development Insights
 
 ### What Worked Well
+
 1. **Boilerplate generation**: AI excelled at creating repetitive code patterns like service structures, component templates, and TypeScript interfaces
 2. **Best practice application**: AI consistently applied Angular best practices like standalone components, proper dependency injection, and accessibility features
 3. **Pattern recognition**: AI recognized the need for separation of concerns and suggested the service-component architecture
@@ -36,6 +40,7 @@
 5. **Error handling**: AI anticipated edge cases and included proper error handling for localStorage and timer operations
 
 ### What Didn't Work
+
 1. **Complex business logic**: AI struggled with the streak calculation algorithm and required human refinement for the date-based logic
 2. **UI/UX creativity**: AI generated functional but basic designs; human input was needed for the gradient themes and visual polish
 3. **Performance optimization nuances**: While AI suggested optimizations, understanding the impact of zoneless change detection required domain expertise
@@ -46,20 +51,21 @@
 ### Code Patterns
 
 #### Signal-Based Service Pattern
+
 ```typescript
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class StateService {
   // Private signals for internal state
   private readonly _internalState = signal<StateType>(initialValue);
-  
+
   // Public computed signals for derived data
   public readonly derivedData = computed(() => {
     // Complex calculations based on internal state
     return this._internalState().someProperty * 2;
   });
-  
+
   // Effects for side effects (auto-save, etc.)
   constructor() {
     effect(() => {
@@ -67,15 +73,16 @@ export class StateService {
       this.saveToStorage(this._internalState());
     });
   }
-  
+
   // Public methods for state updates
   public updateState(newValue: Partial<StateType>): void {
-    this._internalState.update(current => ({ ...current, ...newValue }));
+    this._internalState.update((current) => ({ ...current, ...newValue }));
   }
 }
 ```
 
 #### Component Injection Pattern
+
 ```typescript
 @Component({
   // ... component config
@@ -84,15 +91,14 @@ export class ModernComponent {
   // Inject services using the new inject() function
   private readonly service = inject(ServiceClass);
   protected readonly Math = Math; // Expose utilities to template
-  
+
   // Use computed for template calculations
-  public readonly displayValue = computed(() => 
-    this.service.rawValue().toFixed(2)
-  );
+  public readonly displayValue = computed(() => this.service.rawValue().toFixed(2));
 }
 ```
 
 #### Zoneless Event Handling
+
 ```typescript
 public onKeyDown(event: KeyboardEvent): void {
   // Handle keyboard events without relying on Zone.js
@@ -107,6 +113,7 @@ public onKeyDown(event: KeyboardEvent): void {
 ```
 
 #### SSR-Safe Storage Pattern
+
 ```typescript
 private loadPersistedData(): void {
   // Always check for browser environment before using localStorage
@@ -125,6 +132,7 @@ private loadPersistedData(): void {
 ```
 
 #### Modern Control Flow in Templates
+
 ```typescript
 // Use new @if, @for, @switch syntax instead of *ngIf, *ngFor
 template: `
@@ -144,17 +152,19 @@ template: `
       <break-component />
     }
   }
-`
+`;
 ```
 
 ### Performance Insights
 
 #### Signal vs Observable Performance
+
 - **Signals**: ~10x faster for simple state updates, synchronous execution
 - **Observables**: Still better for complex async operations, but not needed for basic state
 - **Memory usage**: Signals have lower memory overhead due to automatic cleanup
 
 #### Zoneless vs Zone.js
+
 - **Bundle size**: ~50KB smaller without Zone.js
 - **Runtime performance**: Significantly faster change detection cycles
 - **Development experience**: More predictable behavior, easier debugging
@@ -162,6 +172,7 @@ template: `
 ### Accessibility Wins
 
 #### Keyboard Navigation Pattern
+
 ```typescript
 // Comprehensive keyboard support with proper event handling
 public onKeyDown(event: KeyboardEvent): void {
@@ -182,26 +193,25 @@ public onKeyDown(event: KeyboardEvent): void {
 ```
 
 #### ARIA Integration
+
 ```html
 <!-- Comprehensive ARIA labeling for screen readers -->
-<div [attr.aria-label]="'Time remaining: ' + formattedTime()">
-  {{ formattedTime() }}
-</div>
+<div [attr.aria-label]="'Time remaining: ' + formattedTime()">{{ formattedTime() }}</div>
 
-<mat-progress-bar 
-  [attr.aria-label]="'Progress: ' + Math.round(progress()) + ' percent complete'">
-</mat-progress-bar>
+<mat-progress-bar [attr.aria-label]="'Progress: ' + Math.round(progress()) + ' percent complete'"> </mat-progress-bar>
 ```
 
 ## Project Management Insights
 
 ### What Made Development Smooth
+
 1. **Clear requirements upfront**: Having specific technical constraints (Angular 19, signals, zoneless) guided all decisions
 2. **Incremental development**: Building timer → UI → persistence → stats in logical order
 3. **AI pair programming**: Using AI for implementation while keeping human oversight for architecture
 4. **Type-first approach**: Defining interfaces early prevented many runtime issues
 
 ### Challenges Overcome
+
 1. **Version confusion**: Initially targeted Angular 20, had to adjust to Angular 19 reality
 2. **Material theming**: Took several iterations to get the complementary color scheme right
 3. **Responsive design**: Mobile-first approach required rethinking the desktop layout
@@ -210,18 +220,21 @@ public onKeyDown(event: KeyboardEvent): void {
 ## Future Improvements
 
 ### Technical Debt
+
 - Add comprehensive unit tests for all service methods
 - Implement E2E tests for user workflows
 - Add proper error boundaries for graceful failure handling
 - Consider adding internationalization (i18n) support
 
 ### Feature Enhancements
+
 - Add sound notifications for session completion
 - Implement customizable timer durations
 - Add task management integration
 - Consider PWA capabilities for offline usage
 
 ### Developer Experience
+
 - Add Storybook for component documentation
 - Implement automated accessibility testing
 - Add performance monitoring and analytics

@@ -1,21 +1,22 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 @include mat.core();
 
 // Define the theme object.
-$focus-flow-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
-  ),
-  density: (
-    scale: 0,
+$focus-flow-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
   )
-));
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -29,11 +30,12 @@ $focus-flow-theme: mat.define-theme((
   box-sizing: border-box;
 }
 
-html, body { 
-  height: 100%; 
-  margin: 0; 
+html,
+body {
+  height: 100%;
+  margin: 0;
   padding: 0;
-  font-family: 'Roboto', "Helvetica Neue", sans-serif;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
   overflow-x: hidden;
   width: 100%;
 }
@@ -44,7 +46,10 @@ body {
 }
 
 // Smooth transitions for all interactive elements
-button, .mat-mdc-button, .mat-mdc-fab, .mat-mdc-chip {
+button,
+.mat-mdc-button,
+.mat-mdc-fab,
+.mat-mdc-chip {
   transition: all 0.2s ease !important;
 }
 
@@ -56,7 +61,12 @@ button, .mat-mdc-button, .mat-mdc-fab, .mat-mdc-chip {
 }
 
 // Typography improvements
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 300;
   line-height: 1.2;
 }
@@ -86,28 +96,27 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden !important;
     border-radius: 5px !important;
     box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-                0 9px 46px 8px rgba(0, 0, 0, 0.12),
-                0 11px 15px -7px rgba(0, 0, 0, 0.2) !important;
+      0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2) !important;
     margin: 0 !important;
     max-width: 95vw !important;
     max-height: 85vh !important;
     background: white !important;
   }
-  
+
   .mat-mdc-dialog-container .mdc-dialog__surface {
     border-radius: 5px !important;
     padding: 0 !important;
     overflow: hidden !important;
     background: white !important;
   }
-  
+
   .mat-mdc-dialog-content {
     padding: 0 !important;
     margin: 0 !important;
     overflow: hidden !important;
     max-height: none !important;
   }
-  
+
   .mat-mdc-dialog-actions {
     padding: 0 !important;
     margin: 0 !important;
@@ -133,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
   body {
     font-size: 14px;
   }
-  
+
   .mat-mdc-card {
     margin: 10px;
   }
@@ -141,13 +150,19 @@ h1, h2, h3, h4, h5, h6 {
 
 // Animation keyframes for enhanced UX
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes slideInFromTop {
-  0% { 
+  0% {
     opacity: 0;
     transform: translateY(-20px);
   }
@@ -171,7 +186,7 @@ h1, h2, h3, h4, h5, h6 {
   .mat-mdc-card {
     border: 2px solid #333;
   }
-  
+
   button {
     border: 2px solid currentColor;
   }
@@ -179,7 +194,9 @@ h1, h2, h3, h4, h5, h6 {
 
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
