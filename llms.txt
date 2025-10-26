@@ -1,0 +1,275 @@
+# FocusFlow - Pomodoro Timer Application
+
+## Project Overview
+
+FocusFlow is a modern, accessible Pomodoro timer application built with Angular 19. It implements the Pomodoro Technique with 25-minute focus sessions and 5-minute breaks, featuring comprehensive productivity tracking and motivational elements.
+
+**Primary Purpose**: Help users boost productivity through structured work sessions with visual progress tracking, session statistics, and accessibility-first design.
+
+**Target Users**: Knowledge workers, students, developers, and anyone looking to improve focus and time management.
+
+## Technology Stack
+
+### Core Technologies
+- **Angular 19** (standalone components, no NgModules)
+- **TypeScript 5.7+** for type safety
+- **Angular Material 19** for UI components
+- **SCSS** for styling with CSS custom properties
+- **RxJS 7.8** (minimal usage, signals preferred)
+
+### Key Angular Features Used
+- **Signals API**: Primary state management (`signal()`, `computed()`, `effect()`)
+- **Zoneless Change Detection**: Performance optimization
+- **Standalone Components**: No NgModule dependencies
+- **Modern Control Flow**: `@if`, `@for`, `@switch` syntax
+- **Dependency Injection**: `inject()` function pattern
+- **Server-Side Rendering (SSR)**: Angular Universal support
+
+### Build Tools
+- **Angular CLI 19.2.18**: Project scaffolding and build system
+- **Vite**: Development server and build optimization
+- **TypeScript Compiler**: Type checking and transpilation
+
+## Architecture Patterns
+
+### State Management Philosophy
+- **Signals-First Approach**: Use Angular Signals for all reactive state
+- **Computed Values**: Derive state using `computed()` for automatic dependency tracking
+- **Effects for Side Effects**: Use `effect()` for persistence, logging, and external integrations
+- **Avoid RxJS**: Only use observables when absolutely necessary (HTTP, complex async operations)
+
+### Component Architecture
+```typescript
+// Preferred component structure
+@Component({
+  selector: 'app-feature',
+  standalone: true,
+  imports: [CommonModule, MaterialModules],
+  template: `
+    @if (condition()) {
+      <content />
+    }
+    @for (item of items(); track item.id) {
+      <item-component [data]="item" />
+    }
+  `
+})
+export class FeatureComponent {
+  private readonly service = inject(ServiceClass);
+  public readonly computedValue = computed(() => /* logic */);
+}
+```
+
+### Service Layer Pattern
+```typescript
+@Injectable({ providedIn: 'root' })
+export class DomainService {
+  // Private signals for internal state
+  private readonly _state = signal<StateType>(initialValue);
+  
+  // Public computed properties
+  public readonly derivedData = computed(() => this._state().property);
+  
+  // Effects for side effects
+  constructor() {
+    effect(() => this.persistData(this._state()));
+  }
+  
+  // Public methods for state updates
+  public updateState(value: StateType): void {
+    this._state.set(value);
+  }
+}
+```
+
+## Code Organization
+
+### Project Structure
+```
+src/app/
+├── components/              # UI Components
+│   ├── pomodoro-timer.component.ts    # Main timer interface
+│   └── stats.component.ts             # Statistics dashboard
+├── services/               # Business Logic Services
+│   ├── pomodoro.service.ts            # Core timer logic
+│   └── quotes.service.ts              # Motivational content
+├── app.component.ts        # Root component
+├── app.config.ts          # Application configuration
+└── app.routes.ts          # Routing configuration
+```
+
+### File Naming Conventions
+- **Components**: `feature-name.component.ts`
+- **Services**: `feature-name.service.ts`
+- **Interfaces**: Defined inline in service files or separate `.interface.ts` files
+- **Types**: Use TypeScript interfaces over classes for data models
+
+## Development Guidelines
+
+### TypeScript Standards
+- **Strict Mode**: Enable all strict TypeScript options
+- **Explicit Types**: Always define return types for functions
+- **Interface First**: Define interfaces before implementation
+- **Readonly Properties**: Use `readonly` for immutable data
+- **Signal Types**: Always type signals explicitly: `signal<Type>(value)`
+
+### Angular Best Practices
+- **Standalone Components**: Never use NgModules for new components
+- **Signal-Based**: Prefer signals over observables for state management
+- **Dependency Injection**: Use `inject()` function over constructor injection
+- **Change Detection**: Leverage zoneless change detection for performance
+- **Accessibility**: Include ARIA labels, keyboard navigation, and semantic HTML
+
+### CSS/SCSS Conventions
+- **CSS Custom Properties**: Use for theming and dynamic values
+- **Material Theming**: Leverage Angular Material's theming system
+- **Responsive Design**: Mobile-first approach with CSS Grid and Flexbox
+- **Component Scoping**: Keep styles scoped to components
+- **Accessibility**: Ensure proper contrast ratios and focus indicators
+
+## Domain-Specific Knowledge
+
+### Pomodoro Technique Implementation
+- **Focus Sessions**: 25 minutes (1500 seconds)
+- **Break Sessions**: 5 minutes (300 seconds)
+- **Session Tracking**: Store completion data with timestamps
+- **Statistics**: Calculate streaks, daily totals, and weekly summaries
+- **Progress Visualization**: Real-time progress bars and percentage calculations
+
+### Business Logic Patterns
+```typescript
+// Timer state management
+interface PomodoroSession {
+  id: string;
+  type: 'focus' | 'break';
+  duration: number;
+  completedAt: Date;
+  date: string; // YYYY-MM-DD format
+}
+
+// Statistics calculations
+interface PomodoroStats {
+  totalSessions: number;
+  totalFocusTime: number;
+  currentStreak: number;
+  longestStreak: number;
+  sessionsToday: number;
+  sessionsThisWeek: number;
+}
+```
+
+### Data Persistence Strategy
+- **LocalStorage**: Browser-based persistence for session data
+- **SSR Compatibility**: Check for window object before accessing localStorage
+- **Error Handling**: Graceful fallbacks when storage is unavailable
+- **Data Migration**: Version data structures for future compatibility
+
+## UI/UX Patterns
+
+### Material Design Integration
+- **Primary Components**: MatCard, MatButton, MatProgressBar, MatIcon
+- **Color Schemes**: Complementary colors for focus (red/orange) and break (teal/green) modes
+- **Typography**: Roboto font family with proper hierarchy
+- **Spacing**: Consistent 8px grid system
+
+### Accessibility Requirements
+- **Keyboard Navigation**: Full application control via keyboard
+- **Screen Readers**: Comprehensive ARIA labeling and semantic HTML
+- **Focus Management**: Logical tab order and visible focus indicators
+- **Color Contrast**: WCAG AA compliance for all text and UI elements
+
+### Responsive Design
+- **Breakpoints**: Mobile-first with tablet and desktop optimizations
+- **Layout**: CSS Grid for complex layouts, Flexbox for component alignment
+- **Typography**: Fluid scaling based on viewport size
+- **Touch Targets**: Minimum 44px touch targets for mobile devices
+
+## Testing Strategy
+
+### Testing Philosophy
+- **Unit Tests**: Test service logic and computed signal calculations
+- **Component Tests**: Verify component behavior and template rendering
+- **Integration Tests**: Test service-component interactions
+- **Accessibility Tests**: Automated a11y testing for compliance
+
+### Testing Patterns
+```typescript
+// Service testing with signals
+describe('PomodoroService', () => {
+  let service: PomodoroService;
+  
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(PomodoroService);
+  });
+  
+  it('should calculate progress correctly', () => {
+    service.timeRemaining.set(750); // 50% of focus time
+    expect(service.progress()).toBe(50);
+  });
+});
+```
+
+## AI Assistant Guidelines
+
+### Preferred Development Approach
+1. **Signal-First**: Always suggest signals over observables for state management
+2. **Accessibility**: Proactively include accessibility features in all suggestions
+3. **Type Safety**: Provide comprehensive TypeScript types for all code
+4. **Modern Angular**: Use latest Angular 19 features and patterns
+5. **Performance**: Consider zoneless change detection in all recommendations
+
+### Code Generation Preferences
+- **Standalone Components**: Never suggest NgModule-based components
+- **inject() Function**: Prefer over constructor injection
+- **Modern Control Flow**: Use `@if`, `@for`, `@switch` syntax
+- **Signal Updates**: Use `.set()` and `.update()` methods appropriately
+- **Error Handling**: Include proper error handling and edge case management
+
+### Documentation Standards
+- **Inline Comments**: Explain complex business logic and calculations
+- **JSDoc**: Document public methods and interfaces
+- **README Updates**: Keep setup instructions current
+- **Type Definitions**: Document interface properties and their purposes
+
+### Anti-Patterns to Avoid
+- **Zone.js Dependencies**: Don't suggest code that relies on Zone.js
+- **RxJS Overuse**: Avoid observables when signals are sufficient
+- **NgModule Usage**: Never suggest module-based architecture
+- **Direct DOM Manipulation**: Use Angular's reactive patterns instead
+- **Accessibility Oversights**: Always include a11y considerations
+
+## Performance Considerations
+
+### Optimization Strategies
+- **Zoneless Change Detection**: Leverage for improved performance
+- **Signal Granularity**: Use computed signals for derived state
+- **OnPush Strategy**: Optimize component change detection
+- **Lazy Loading**: Consider for future feature modules
+- **Bundle Optimization**: Tree-shake unused dependencies
+
+### Memory Management
+- **Signal Cleanup**: Signals automatically clean up dependencies
+- **Effect Cleanup**: Ensure effects are properly disposed
+- **Event Listeners**: Remove listeners in component destruction
+- **Timer Management**: Clear intervals and timeouts appropriately
+
+## Deployment & Build
+
+### Build Configuration
+- **Production Optimization**: Enable minification and tree-shaking
+- **SSR Support**: Ensure server-side rendering compatibility
+- **PWA Considerations**: Future enhancement for offline capability
+- **Bundle Analysis**: Monitor bundle size and optimize imports
+
+### Environment Configuration
+- **Development**: Hot reload with source maps
+- **Production**: Optimized builds with error reporting
+- **Testing**: Isolated environment for unit and integration tests
+
+---
+
+**Last Updated**: October 26, 2025  
+**Angular Version**: 19.2.0  
+**Project Status**: Production Ready  
+**Maintainer**: AI-Human Collaborative Development

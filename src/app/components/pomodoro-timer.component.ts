@@ -5,8 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { PomodoroService } from '../services/pomodoro.service';
 import { QuotesService } from '../services/quotes.service';
+import { SettingsComponent } from './settings.component';
 
 @Component({
   selector: 'app-pomodoro-timer',
@@ -35,6 +37,15 @@ import { QuotesService } from '../services/quotes.service';
           <mat-card-subtitle>
             {{ pomodoroService.currentMode() === 'focus' ? 'Stay focused on your task' : 'Take a well-deserved break' }}
           </mat-card-subtitle>
+          
+          <!-- Settings Button -->
+          <button 
+            mat-icon-button 
+            (click)="openSettings()"
+            class="settings-button"
+            aria-label="Open timer settings">
+            <mat-icon>settings</mat-icon>
+          </button>
         </mat-card-header>
 
         <mat-card-content>
@@ -47,7 +58,7 @@ import { QuotesService } from '../services/quotes.service';
                 [disabled]="pomodoroService.isRunning()"
                 aria-label="Switch to focus mode">
                 <mat-icon matChipAvatar>work</mat-icon>
-                Focus (25 min)
+                Focus ({{ pomodoroService.settings().focusDuration }} min)
               </mat-chip>
               <mat-chip 
                 [class.selected]="pomodoroService.currentMode() === 'break'"
@@ -55,7 +66,7 @@ import { QuotesService } from '../services/quotes.service';
                 [disabled]="pomodoroService.isRunning()"
                 aria-label="Switch to break mode">
                 <mat-icon matChipAvatar>coffee</mat-icon>
-                Break (5 min)
+                Break ({{ pomodoroService.settings().breakDuration }} min)
               </mat-chip>
             </mat-chip-set>
           </div>
@@ -132,29 +143,46 @@ import { QuotesService } from '../services/quotes.service';
               class="help-toggle"
               [attr.aria-label]="showKeyboardHelp ? 'Hide keyboard shortcuts' : 'Show keyboard shortcuts'"
               [attr.aria-expanded]="showKeyboardHelp">
-              <mat-icon>keyboard</mat-icon>
-              {{ showKeyboardHelp ? 'Hide' : 'Show' }} Shortcuts
+              <mat-icon>{{ showKeyboardHelp ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+              <span class="help-toggle-text">
+                {{ showKeyboardHelp ? 'Hide' : 'Show' }} Shortcuts
+              </span>
+              <span class="shortcut-count" *ngIf="!showKeyboardHelp">(5 shortcuts)</span>
             </button>
             
-            <div class="shortcuts-list" *ngIf="showKeyboardHelp" role="region" aria-label="Keyboard shortcuts">
+            <div class="shortcuts-list" 
+                 *ngIf="showKeyboardHelp" 
+                 role="region" 
+                 aria-label="Keyboard shortcuts"
+                 [@slideInOut]>
               <div class="shortcut-item">
-                <kbd>Space</kbd> or <kbd>Enter</kbd>
+                <div class="shortcut-keys">
+                  <kbd>Space</kbd> or <kbd>Enter</kbd>
+                </div>
                 <span>Start/Pause timer</span>
               </div>
               <div class="shortcut-item">
-                <kbd>Ctrl</kbd> + <kbd>R</kbd>
+                <div class="shortcut-keys">
+                  <kbd>Ctrl</kbd> + <kbd>R</kbd>
+                </div>
                 <span>Reset timer</span>
               </div>
               <div class="shortcut-item">
-                <kbd>1</kbd>
+                <div class="shortcut-keys">
+                  <kbd>1</kbd>
+                </div>
                 <span>Switch to Focus mode</span>
               </div>
               <div class="shortcut-item">
-                <kbd>2</kbd>
+                <div class="shortcut-keys">
+                  <kbd>2</kbd>
+                </div>
                 <span>Switch to Break mode</span>
               </div>
               <div class="shortcut-item">
-                <kbd>Q</kbd>
+                <div class="shortcut-keys">
+                  <kbd>Q</kbd>
+                </div>
                 <span>New motivational quote</span>
               </div>
             </div>
@@ -167,20 +195,26 @@ import { QuotesService } from '../services/quotes.service';
     .timer-container {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      align-items: flex-start;
+      min-height: calc(100vh - 64px);
+      height: calc(100vh - 64px);
       padding: 20px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      width: 100%;
+      box-sizing: border-box;
+      overflow-y: auto;
     }
 
     .timer-card {
-      max-width: 600px;
+      max-width: 900px;
       width: 100%;
-      padding: 20px;
+      padding: 25px;
       text-align: center;
       transition: all 0.3s ease;
       border-radius: 16px !important;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+      margin: 10px auto;
+      max-height: fit-content;
     }
 
     .timer-card.focus-mode {
@@ -202,6 +236,22 @@ import { QuotesService } from '../services/quotes.service';
       margin-bottom: 10px;
     }
 
+    .settings-button {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+
+    .settings-button:hover {
+      opacity: 1;
+    }
+
+    mat-card-header {
+      position: relative;
+    }
+
     .mode-chips {
       margin: 20px 0;
     }
@@ -212,28 +262,28 @@ import { QuotesService } from '../services/quotes.service';
     }
 
     .timer-display {
-      margin: 40px 0;
+      margin: 25px 0;
     }
 
     .time-text {
-      font-size: 4rem;
+      font-size: 3.5rem;
       font-weight: 300;
       font-family: 'Roboto Mono', monospace;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .timer-progress {
       height: 8px;
       border-radius: 4px;
-      margin: 20px 0;
+      margin: 15px 0;
     }
 
     .timer-controls {
       display: flex;
       justify-content: center;
       gap: 20px;
-      margin: 30px 0;
+      margin: 20px 0;
     }
 
     .timer-controls button {
@@ -245,7 +295,7 @@ import { QuotesService } from '../services/quotes.service';
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
-      margin: 30px 0;
+      margin: 25px 0;
       padding: 20px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 12px;
@@ -261,7 +311,7 @@ import { QuotesService } from '../services/quotes.service';
     }
 
     .quote-section {
-      margin-top: 30px;
+      margin-top: 25px;
       padding: 20px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 12px;
@@ -287,67 +337,228 @@ import { QuotesService } from '../services/quotes.service';
 
     .keyboard-help {
       margin-top: 20px;
-      padding: 15px;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 8px;
       backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .keyboard-help:not(.expanded) {
+      padding: 10px 16px;
+    }
+
+    .keyboard-help.expanded {
+      padding: 16px 20px;
     }
 
     .help-toggle {
-      margin-bottom: 10px;
+      width: 100% !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 8px 12px !important;
+      margin: 0 !important;
+      min-height: 40px !important;
+      font-size: 0.9rem !important;
+      text-transform: none !important;
+      background: transparent !important;
+      border-radius: 6px !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .help-toggle:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .help-toggle-text {
+      flex: 1;
+      text-align: left;
+      margin-left: 8px;
+    }
+
+    .shortcut-count {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-left: auto;
+      margin-right: 8px;
     }
 
     .shortcuts-list {
+      margin-top: 16px;
       display: grid;
-      gap: 8px;
+      gap: 10px;
       font-size: 0.9rem;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 200px;
+      }
     }
 
     .shortcut-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 5px 0;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .shortcut-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(2px);
+    }
+
+    .shortcut-keys {
+      display: flex;
+      gap: 4px;
+      align-items: center;
     }
 
     kbd {
       background: rgba(255, 255, 255, 0.2);
       border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 0.8rem;
-      font-family: monospace;
-      margin: 0 2px;
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      min-width: 24px;
+      text-align: center;
     }
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
       .timer-container {
-        padding: 10px;
+        padding: 15px 10px;
+        min-height: calc(100vh - 64px);
+        height: calc(100vh - 64px);
+      }
+
+      .timer-card {
+        max-width: 100%;
+        padding: 20px;
+        margin: 5px auto;
       }
 
       .time-text {
-        font-size: 3rem;
+        font-size: 2.8rem;
+      }
+
+      .timer-display {
+        margin: 20px 0;
       }
 
       .session-info {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 15px;
+        padding: 16px;
+        margin: 20px 0;
+      }
+
+      .timer-controls {
+        margin: 15px 0;
       }
 
       .timer-controls button {
         width: 50px;
         height: 50px;
       }
+
+      .quote-section {
+        padding: 16px;
+        margin-top: 20px;
+      }
+
+      .keyboard-help {
+        margin-top: 15px;
+      }
+
+      .keyboard-help:not(.expanded) {
+        padding: 8px 12px;
+      }
+
+      .keyboard-help.expanded {
+        padding: 12px 16px;
+      }
+
+      .help-toggle {
+        min-height: 36px !important;
+        font-size: 0.85rem !important;
+      }
+
+      .shortcut-count {
+        font-size: 0.75rem;
+      }
+
+      .shortcuts-list {
+        gap: 8px;
+        font-size: 0.85rem;
+      }
+
+      .shortcut-item {
+        padding: 6px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .shortcut-keys {
+        align-self: flex-start;
+      }
+
+      kbd {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+      }
     }
 
     @media (max-width: 480px) {
+      .timer-container {
+        padding: 10px 8px;
+        min-height: calc(100vh - 64px);
+        height: calc(100vh - 64px);
+      }
+
       .time-text {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
       }
 
       .timer-card {
-        padding: 15px;
+        padding: 16px;
+        margin: 2px auto;
+      }
+
+      .session-info {
+        padding: 12px;
+        margin: 15px 0;
+      }
+
+      .quote-section {
+        padding: 12px;
+        margin-top: 15px;
+      }
+
+      .timer-display {
+        margin: 15px 0;
+      }
+
+      .timer-controls {
+        margin: 12px 0;
       }
     }
   `]
@@ -355,6 +566,7 @@ import { QuotesService } from '../services/quotes.service';
 export class PomodoroTimerComponent {
   public readonly pomodoroService = inject(PomodoroService);
   public readonly quotesService = inject(QuotesService);
+  private readonly dialog = inject(MatDialog);
   protected readonly Math = Math;
   public showKeyboardHelp = false;
 
@@ -431,5 +643,28 @@ export class PomodoroTimerComponent {
 
   public toggleKeyboardHelp(): void {
     this.showKeyboardHelp = !this.showKeyboardHelp;
+  }
+
+  public openSettings(): void {
+    const dialogRef = this.dialog.open(SettingsComponent, {
+      width: '1100px',
+      maxWidth: '90vw',
+      maxHeight: '80vh',
+      disableClose: false,
+      autoFocus: true,
+      role: 'dialog',
+      ariaLabel: 'Timer settings dialog',
+      panelClass: 'settings-dialog-panel',
+      hasBackdrop: true,
+      backdropClass: 'settings-dialog-backdrop'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Settings were saved, no additional action needed
+        // The service automatically updates via signals
+        console.log('Settings updated:', result);
+      }
+    });
   }
 }

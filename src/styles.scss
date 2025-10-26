@@ -34,12 +34,13 @@ html, body {
   margin: 0; 
   padding: 0;
   font-family: 'Roboto', "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 // Smooth transitions for all interactive elements
@@ -76,6 +77,55 @@ h1, h2, h3, h4, h5, h6 {
 
 .mat-mdc-chip {
   border-radius: 20px !important;
+}
+
+// Settings dialog panel customization
+.settings-dialog-panel {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 5px !important;
+    box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+                0 9px 46px 8px rgba(0, 0, 0, 0.12),
+                0 11px 15px -7px rgba(0, 0, 0, 0.2) !important;
+    margin: 0 !important;
+    max-width: 95vw !important;
+    max-height: 85vh !important;
+    background: white !important;
+  }
+  
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 5px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: white !important;
+  }
+  
+  .mat-mdc-dialog-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    max-height: none !important;
+  }
+  
+  .mat-mdc-dialog-actions {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+  }
+}
+
+.settings-dialog-backdrop {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+// Global override for any remaining Material dialog radius
+.mat-mdc-dialog-container {
+  border-radius: 5px !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 5px !important;
 }
 
 // Responsive design utilities
